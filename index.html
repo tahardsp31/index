@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -12,7 +12,26 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #000; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #fff; }
         
-        /* ========== صفحة الدخول الأولى - تظهر مرة واحدة فقط ========== */
+        /* تحسينات للتحكم عن بعد */
+        .focusable:focus {
+            outline: 3px solid #ffd700 !important;
+            outline-offset: 2px;
+            transform: scale(1.02);
+            transition: all 0.1s ease;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        
+        .channel:focus, .package:focus, .side-menu-items li:focus {
+            background: rgba(255, 215, 0, 0.15);
+            border-color: #ffd700;
+        }
+        
+        /* مؤشر التركيز الافتراضي */
+        :focus {
+            outline: none;
+        }
+        
+        /* ========== صفحة الدخول الأولى ========== */
         .splash-screen {
             position: fixed;
             top: 0;
@@ -99,8 +118,6 @@
             font-weight: 900;
             margin-left: 5px;
         }
-
-        /* تم حذف النجمتين وكلمة PREMIUM */
 
         .splash-subtitle {
             font-size: clamp(14px, 4vw, 18px);
@@ -252,7 +269,6 @@
             50% { transform: translate(30px, -30px) scale(1.2); opacity: 0.2; }
         }
 
-        /* إخفاء صفحة الدخول بعد النقر - مرة واحدة فقط */
         .splash-screen.hide {
             animation: splashFadeOut 0.5s ease forwards;
         }
@@ -266,7 +282,6 @@
             100% { opacity: 0; visibility: hidden; }
         }
 
-        /* تعديل ظهور المحتوى الرئيسي */
         #main-content, #navbar {
             opacity: 1;
             transition: opacity 0.5s ease;
@@ -277,7 +292,6 @@
             opacity: 1;
         }
 
-        /* تحسينات إضافية للشاشات الصغيرة */
         @media (max-width: 480px) {
             .splash-logo .logo-top {
                 gap: 5px;
@@ -387,7 +401,7 @@
         
         .epg-info { position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); color: #ffd700; padding: 8px 15px; border-radius: 20px; font-size: 12px; border: 1px solid rgba(255,215,0,0.3); z-index: 50; max-width: 70%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         
-        /* ========== شريط السيرفر - شفاف بالكامل ========== */
+        /* ========== شريط السيرفر ========== */
         .server-badge { 
             position: absolute; 
             top: 20px; 
@@ -528,11 +542,64 @@
         .fullscreen-mode .channels-area, .fullscreen-mode #navbar, .fullscreen-mode .packages-footer, .fullscreen-mode .fullscreen-btn, .fullscreen-mode .server-badge, .fullscreen-mode .channel-name-display { display: none !important; }
         .fullscreen-mode .exit-fullscreen { display: flex !important; }
         
+        /* ========== شريط التنقل الرقمي ========== */
+        .channel-number-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: #ffd700;
+            padding: 30px 50px;
+            border-radius: 20px;
+            font-size: 60px;
+            font-weight: bold;
+            border: 3px solid #ffd700;
+            z-index: 10000;
+            display: none;
+            backdrop-filter: blur(10px);
+            animation: numberPop 0.3s ease;
+        }
+        
+        @keyframes numberPop {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+        
+        /* ========== مؤشر الصفحة ========== */
+        .page-indicator {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: #ffd700;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 16px;
+            border: 1px solid #ffd700;
+            z-index: 10000;
+            display: none;
+            backdrop-filter: blur(5px);
+        }
+        
+        .page-indicator.visible {
+            display: block;
+            animation: fadeInOut 2s ease forwards;
+        }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            90% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+        }
+        
         @keyframes notificationFade { 0% { opacity: 0; transform: translate(-50%, 20px); } 10% { opacity: 1; transform: translate(-50%, 0); } 90% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -20px); } }
     </style>
 </head>
 <body>
-    <!-- صفحة الدخول الأولى - تظهر مرة واحدة فقط -->
+    <!-- صفحة الدخول الأولى -->
     <div class="splash-screen" id="splashScreen">
         <div class="splash-decoration">
             <span></span>
@@ -546,7 +613,6 @@
                     <span class="logo-text">TAhar</span>
                     <span class="logo-plus">TV+</span>
                 </div>
-                <!-- تم حذف النجمتين وكلمة PREMIUM -->
             </div>
         </div>
         <div class="splash-subtitle">ULTRA STABLE IPTV</div>
@@ -627,7 +693,7 @@
             <div class="channel-name-display" id="channelNameDisplay">Select Channel</div>
             <div class="epg-info" id="epgInfo"></div>
             
-            <!-- شريط السيرفر - شفاف ويظهر فقط في المشغل -->
+            <!-- شريط السيرفر -->
             <div class="server-badge" id="serverBadge" onclick="manualServerSwitch()">
                 <i class="fas fa-server"></i>
                 <span id="serverNumber">1</span>
@@ -647,35 +713,451 @@
     
     <!-- المؤشر الشامل -->
     <div id="comprehensive-indicator"></div>
+    
+    <!-- مؤشر رقم القناة -->
+    <div class="channel-number-indicator" id="channelNumberIndicator"></div>
+    
+    <!-- مؤشر الصفحة -->
+    <div class="page-indicator" id="pageIndicator"></div>
 
     <script>
-        // ==================== وظائف صفحة الدخول - تظهر مرة واحدة فقط ====================
+        // ==================== نظام التحكم عن بعد المتكامل ====================
+        class RemoteControlSystem {
+            constructor() {
+                this.focusableElements = [];
+                this.currentFocusIndex = -1;
+                this.currentMode = 'packages'; // packages, channels, menu
+                this.numberBuffer = '';
+                this.numberTimeout = null;
+                this.pageSize = 10; // عدد العناصر في الصفحة الواحدة
+                this.currentPage = 1;
+                this.totalPages = 1;
+                this.init();
+            }
+            
+            init() {
+                // إضافة مستمعي الأحداث للتحكم عن بعد
+                document.addEventListener('keydown', (e) => this.handleKeyDown(e));
+                
+                // إضافة خاصية التركيز لجميع العناصر القابلة للتركيز
+                this.setupFocusableElements();
+                
+                // تحديث العناصر القابلة للتركيز عند تغيير المحتوى
+                this.observeDOMChanges();
+            }
+            
+            setupFocusableElements() {
+                // إضافة tabindex للعناصر القابلة للتركيز
+                document.querySelectorAll('.package, .channel, .side-menu-items li, .menu-btn, .server-badge, .fullscreen-btn, .exit-fullscreen').forEach(el => {
+                    if (!el.hasAttribute('tabindex')) {
+                        el.setAttribute('tabindex', '0');
+                        el.classList.add('focusable');
+                    }
+                });
+            }
+            
+            observeDOMChanges() {
+                const observer = new MutationObserver(() => {
+                    this.setupFocusableElements();
+                    this.updateFocusableList();
+                });
+                
+                observer.observe(document.body, {
+                    childList: true,
+                    subtree: true
+                });
+            }
+            
+            updateFocusableList() {
+                if (this.currentMode === 'packages') {
+                    this.focusableElements = Array.from(document.querySelectorAll('.package:not(.package-favorite)'));
+                } else if (this.currentMode === 'channels') {
+                    this.focusableElements = Array.from(document.querySelectorAll('.channel'));
+                } else if (this.currentMode === 'menu') {
+                    this.focusableElements = Array.from(document.querySelectorAll('.side-menu-items li'));
+                }
+                
+                // إضافة الأزرار العامة
+                const generalButtons = Array.from(document.querySelectorAll('.menu-btn, .server-badge, .fullscreen-btn, .exit-fullscreen'));
+                this.focusableElements = [...this.focusableElements, ...generalButtons];
+                
+                this.totalPages = Math.ceil(this.focusableElements.length / this.pageSize);
+            }
+            
+            handleKeyDown(e) {
+                const key = e.key;
+                
+                // تجاهل الأحداث إذا كان المستخدم يكتب في حقل نصي
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+                
+                // منع التمرير الافتراضي للصفحة
+                if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'PageUp', 'PageDown', 'Home', 'End'].includes(key)) {
+                    e.preventDefault();
+                }
+                
+                // معالجة الأزرار الرقمية
+                if (key >= '0' && key <= '9') {
+                    this.handleNumberKey(key);
+                    return;
+                }
+                
+                switch(key) {
+                    case 'ArrowUp':
+                        this.navigateUp();
+                        break;
+                    case 'ArrowDown':
+                        this.navigateDown();
+                        break;
+                    case 'ArrowLeft':
+                        this.navigateLeft();
+                        break;
+                    case 'ArrowRight':
+                        this.navigateRight();
+                        break;
+                    case 'Enter':
+                    case ' ':
+                        this.activateFocused();
+                        break;
+                    case 'Escape':
+                    case 'Backspace':
+                        this.handleBack();
+                        break;
+                    case 'PageUp':
+                        this.scrollPage(-1);
+                        break;
+                    case 'PageDown':
+                        this.scrollPage(1);
+                        break;
+                    case 'Home':
+                        this.goToFirst();
+                        break;
+                    case 'End':
+                        this.goToLast();
+                        break;
+                    case 'F1':
+                    case 'Help':
+                        this.showHelp();
+                        break;
+                    case 'MediaPlayPause':
+                        this.togglePlayPause();
+                        break;
+                    case 'MediaStop':
+                        this.stopPlayback();
+                        break;
+                    case 'MediaTrackPrevious':
+                        this.prevChannel();
+                        break;
+                    case 'MediaTrackNext':
+                        this.nextChannel();
+                        break;
+                    case 'Red':
+                    case 'F2':
+                        this.manualServerSwitch();
+                        break;
+                    case 'Green':
+                    case 'F3':
+                        this.toggleFavorite();
+                        break;
+                    case 'Yellow':
+                    case 'F4':
+                        this.toggleFullscreen();
+                        break;
+                    case 'Blue':
+                    case 'F5':
+                        this.toggleMenu();
+                        break;
+                    case 'Info':
+                    case 'Display':
+                        this.showInfo();
+                        break;
+                    case 'Exit':
+                        this.handleBack();
+                        break;
+                }
+            }
+            
+            handleNumberKey(key) {
+                this.numberBuffer += key;
+                
+                // عرض المؤشر
+                const indicator = document.getElementById('channelNumberIndicator');
+                indicator.textContent = this.numberBuffer;
+                indicator.style.display = 'block';
+                
+                // إعادة تعيين المؤقت
+                if (this.numberTimeout) clearTimeout(this.numberTimeout);
+                
+                this.numberTimeout = setTimeout(() => {
+                    this.processNumberBuffer();
+                }, 1000);
+            }
+            
+            processNumberBuffer() {
+                const indicator = document.getElementById('channelNumberIndicator');
+                indicator.style.display = 'none';
+                
+                if (this.numberBuffer && this.currentMode === 'channels') {
+                    const channelNumber = parseInt(this.numberBuffer) - 1;
+                    if (channelNumber >= 0 && channelNumber < this.focusableElements.length) {
+                        this.focusableElements[channelNumber]?.click();
+                    }
+                }
+                
+                this.numberBuffer = '';
+            }
+            
+            navigateUp() {
+                if (this.focusableElements.length === 0) return;
+                
+                const gridCols = this.getGridColumns();
+                if (gridCols > 1) {
+                    // تنقل شبكي
+                    this.currentFocusIndex = Math.max(0, this.currentFocusIndex - gridCols);
+                } else {
+                    // تنقل عمودي
+                    this.currentFocusIndex = Math.max(0, this.currentFocusIndex - 1);
+                }
+                
+                this.focusCurrent();
+            }
+            
+            navigateDown() {
+                if (this.focusableElements.length === 0) return;
+                
+                const gridCols = this.getGridColumns();
+                if (gridCols > 1) {
+                    this.currentFocusIndex = Math.min(this.focusableElements.length - 1, this.currentFocusIndex + gridCols);
+                } else {
+                    this.currentFocusIndex = Math.min(this.focusableElements.length - 1, this.currentFocusIndex + 1);
+                }
+                
+                this.focusCurrent();
+            }
+            
+            navigateLeft() {
+                if (this.focusableElements.length === 0) return;
+                
+                if (this.currentMode === 'channels') {
+                    // في وضع القنوات، الانتقال لليسار يعني القناة السابقة
+                    this.prevChannel();
+                } else {
+                    this.currentFocusIndex = Math.max(0, this.currentFocusIndex - 1);
+                    this.focusCurrent();
+                }
+            }
+            
+            navigateRight() {
+                if (this.focusableElements.length === 0) return;
+                
+                if (this.currentMode === 'channels') {
+                    // في وضع القنوات، الانتقال لليمين يعني القناة التالية
+                    this.nextChannel();
+                } else {
+                    this.currentFocusIndex = Math.min(this.focusableElements.length - 1, this.currentFocusIndex + 1);
+                    this.focusCurrent();
+                }
+            }
+            
+            getGridColumns() {
+                if (this.currentMode === 'packages') {
+                    const container = document.querySelector('.packages');
+                    if (container) {
+                        const style = window.getComputedStyle(container);
+                        return style.gridTemplateColumns.split(' ').length;
+                    }
+                }
+                return 1;
+            }
+            
+            focusCurrent() {
+                // إزالة التركيز من جميع العناصر
+                this.focusableElements.forEach(el => el.blur());
+                
+                if (this.currentFocusIndex >= 0 && this.currentFocusIndex < this.focusableElements.length) {
+                    const element = this.focusableElements[this.currentFocusIndex];
+                    element.focus();
+                    
+                    // تمرير العنصر إلى视图
+                    element.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center',
+                        inline: 'center'
+                    });
+                    
+                    // تحديث مؤشر الصفحة
+                    this.updatePageIndicator();
+                }
+            }
+            
+            activateFocused() {
+                if (this.currentFocusIndex >= 0 && this.currentFocusIndex < this.focusableElements.length) {
+                    this.focusableElements[this.currentFocusIndex].click();
+                }
+            }
+            
+            handleBack() {
+                if (playerSection.classList.contains('active')) {
+                    goBackToPackages();
+                    this.setMode('packages');
+                } else if (document.getElementById('side-menu').classList.contains('active')) {
+                    toggleMenu();
+                }
+            }
+            
+            scrollPage(direction) {
+                this.currentPage += direction;
+                if (this.currentPage < 1) this.currentPage = 1;
+                if (this.currentPage > this.totalPages) this.currentPage = this.totalPages;
+                
+                const startIndex = (this.currentPage - 1) * this.pageSize;
+                if (startIndex < this.focusableElements.length) {
+                    this.currentFocusIndex = startIndex;
+                    this.focusCurrent();
+                }
+                
+                this.showPageIndicator();
+            }
+            
+            goToFirst() {
+                this.currentFocusIndex = 0;
+                this.focusCurrent();
+            }
+            
+            goToLast() {
+                this.currentFocusIndex = this.focusableElements.length - 1;
+                this.focusCurrent();
+            }
+            
+            setMode(mode) {
+                this.currentMode = mode;
+                this.currentFocusIndex = -1;
+                this.updateFocusableList();
+                
+                // تركيز العنصر الأول بعد قليل
+                setTimeout(() => {
+                    if (this.focusableElements.length > 0) {
+                        this.currentFocusIndex = 0;
+                        this.focusCurrent();
+                    }
+                }, 100);
+            }
+            
+            updatePageIndicator() {
+                if (this.currentFocusIndex >= 0) {
+                    this.currentPage = Math.floor(this.currentFocusIndex / this.pageSize) + 1;
+                    this.showPageIndicator();
+                }
+            }
+            
+            showPageIndicator() {
+                const indicator = document.getElementById('pageIndicator');
+                indicator.textContent = `الصفحة ${this.currentPage} من ${this.totalPages}`;
+                indicator.classList.add('visible');
+                
+                setTimeout(() => {
+                    indicator.classList.remove('visible');
+                }, 2000);
+            }
+            
+            showHelp() {
+                const helpMessage = `
+                    أزرار التحكم:
+                    ↑↓←→ : التنقل
+                    Enter : تحديد
+                    أرقام 0-9 : اختيار مباشر
+                    PageUp/PageDown : تصفح الصفحات
+                    Home/End : أول/آخر عنصر
+                    F1 : هذه المساعدة
+                    F2 : تبديل السيرفر
+                    F3 : إضافة/إزالة من المفضلة
+                    F4 : ملء الشاشة
+                    F5 : القائمة الجانبية
+                    Back/Esc : رجوع
+                `;
+                showNotification(helpMessage);
+            }
+            
+            togglePlayPause() {
+                if (videoPlayer) {
+                    if (videoPlayer.paused) {
+                        videoPlayer.play();
+                    } else {
+                        videoPlayer.pause();
+                    }
+                }
+            }
+            
+            toggleFavorite() {
+                if (currentChannel) {
+                    toggleFavorite(currentChannel);
+                }
+            }
+            
+            showInfo() {
+                if (currentChannel) {
+                    const info = `
+                        القناة: ${currentChannel.name}
+                        السيرفر: ${currentServerIndex + 1}/${currentChannel.urls?.length || 1}
+                        ${epgInfo.textContent ? 'البرنامج: ' + epgInfo.textContent : ''}
+                    `;
+                    showNotification(info);
+                }
+            }
+            
+            nextChannel() {
+                window.nextChannel();
+            }
+            
+            prevChannel() {
+                window.prevChannel();
+            }
+            
+            manualServerSwitch() {
+                window.manualServerSwitch();
+            }
+            
+            toggleFullscreen() {
+                window.toggleFullscreen();
+            }
+            
+            toggleMenu() {
+                window.toggleMenu();
+            }
+            
+            stopPlayback() {
+                window.stopPlayback();
+            }
+        }
+
+        // إنشاء نظام التحكم عن بعد
+        const remoteControl = new RemoteControlSystem();
+
+        // ==================== وظائف صفحة الدخول ====================
         function hideSplashScreen() {
             const splash = document.getElementById('splashScreen');
             splash.classList.add('hide');
             
-            // حفظ حالة إخفاء الصفحة في localStorage
             localStorage.setItem('splashShown', 'true');
             
             setTimeout(() => {
                 splash.style.display = 'none';
                 splash.classList.add('permanent-hide');
                 document.body.classList.add('splash-hidden');
+                
+                // تفعيل وضع الباقات في نظام التحكم
+                remoteControl.setMode('packages');
             }, 500);
         }
 
-        // التحقق مما إذا كانت صفحة الدخول قد ظهرت من قبل
         function checkSplashScreen() {
             const splashShown = localStorage.getItem('splashShown');
             const splash = document.getElementById('splashScreen');
             
             if (splashShown === 'true') {
-                // إذا ظهرت من قبل، نخفيها فوراً
                 splash.style.display = 'none';
                 splash.classList.add('permanent-hide');
                 document.body.classList.add('splash-hidden');
             } else {
-                // إذا لم تظهر من قبل، نعرضها
                 splash.style.display = 'flex';
                 document.body.style.overflow = 'hidden';
                 setTimeout(() => {
@@ -684,20 +1166,17 @@
             }
         }
 
-        // استدعاء الدالة عند تحميل الصفحة
         document.addEventListener('DOMContentLoaded', checkSplashScreen);
 
-        // ==================== قائمة روابط M3U ====================
+        // ==================== باقي الكود الأصلي مع إضافة دعم التحكم عن بعد ====================
         const M3U_URLS = [
             "https://raw.githubusercontent.com/tahardsp31/a/refs/heads/main/1.m3u",
             "https://raw.githubusercontent.com/tahardsp31/aa/refs/heads/main/11.m3u",
             "https://raw.githubusercontent.com/tahardsp31/aaa/refs/heads/main/111.m3u"
         ];
         
-        // رابط EPG
         const EPG_URL = "https://raw.githubusercontent.com/tahardsp31/epg/refs/heads/main/epg.xml";
         
-        // ==================== إعدادات HLS المتطورة ====================
         const HLS_CONFIG = {
             enableWorker: true,
             lowLatencyMode: false,
@@ -749,7 +1228,6 @@
             testBandwidth: false
         };
         
-        // ==================== المتغيرات العامة ====================
         let PACKAGES = [];
         let currentPackageData = null;
         let favoriteChannels = [];
@@ -761,23 +1239,19 @@
         let channelNameTimeout = null;
         let lastTap = 0;
         
-        // EPG
         let epgData = null;
         let epgLoaded = false;
         let epgInterval = null;
         
-        // السحب والترتيب
         let draggedItem = null;
         let dragOverItem = null;
         let dragStartY = 0;
         let touchIdentifier = null;
         
-        // التخزين المؤقت
         let preloadedChannels = new Map();
         let bufferCheckInterval = null;
         let bufferStarvationCount = 0;
         
-        // عناصر DOM
         const packagesContainer = document.getElementById('packagesContainer');
         const playerSection = document.getElementById('playerSection');
         const mainContent = document.getElementById('main-content');
@@ -794,7 +1268,7 @@
         const reconnectIndicator = document.getElementById('reconnectIndicator');
         const comprehensiveIndicator = document.getElementById('comprehensive-indicator');
         
-        // ==================== نظام إعادة الاتصال الذكي المتطور ====================
+        // ==================== نظام إعادة الاتصال الذكي ====================
         let reconnectSystem = {
             isReconnecting: false,
             reconnectTimer: null,
@@ -838,7 +1312,6 @@
                 
                 setTimeout(() => {
                     if (this.isReconnecting) {
-                        console.log(`🔄 Reconnect attempt #${this.reconnectAttempts}`);
                         playCurrentServer(true);
                     }
                 }, this.reconnectDelay);
@@ -899,7 +1372,6 @@
             
             recordFailure: function() {
                 this.failures++;
-                console.log(`⚠️ Server failure #${this.failures}/${this.maxFailures}`);
                 this.updateBadge();
                 
                 if (this.failures >= this.maxFailures) {
@@ -999,13 +1471,12 @@
             }
         };
         
-        // ==================== نظام استقرار البث المتطور ====================
+        // ==================== نظام استقرار البث ====================
         let streamStabilizer = {
             lastPosition: 0,
             lastTime: 0,
             freezeCount: 0,
             stallTimer: null,
-            heartbeatTimer: null,
             
             check: function() {
                 if (!videoPlayer || !currentChannel) return true;
@@ -1052,8 +1523,6 @@
                     this.stallTimer = null;
                     
                     if (currentChannel && !reconnectSystem.isReconnecting) {
-                        console.log('⚠️ Stream stalled, starting reconnect');
-                        
                         if (hls) {
                             try {
                                 hls.recoverMediaError();
@@ -1093,8 +1562,16 @@
         
         // ==================== تبديل القائمة الجانبية ====================
         window.toggleMenu = function() {
-            document.getElementById('side-menu').classList.toggle('active');
-            document.getElementById('overlay').classList.toggle('active');
+            const menu = document.getElementById('side-menu');
+            const overlay = document.getElementById('overlay');
+            menu.classList.toggle('active');
+            overlay.classList.toggle('active');
+            
+            if (menu.classList.contains('active')) {
+                remoteControl.setMode('menu');
+            } else {
+                remoteControl.setMode(playerSection.classList.contains('active') ? 'channels' : 'packages');
+            }
         };
 
         // ==================== نظام المفضلة ====================
@@ -1129,10 +1606,10 @@
             const index = favoriteChannels.findIndex(ch => ch.id === channel.id);
             if (index === -1) {
                 favoriteChannels.push(channel);
-                showNotification('⭐ Added to favorites');
+                showNotification('⭐ تمت الإضافة إلى المفضلة');
             } else {
                 favoriteChannels.splice(index, 1);
-                showNotification('☆ Removed from favorites');
+                showNotification('☆ تمت الإزالة من المفضلة');
             }
             saveFavorites();
             updateAllFavoriteButtons(channel.id);
@@ -1158,6 +1635,7 @@
                 padding: 15px 30px; border-radius: 50px; font-size: 16px; z-index: 1000000;
                 border: 2px solid #ffd700; box-shadow: 0 0 30px rgba(255,215,0,0.3);
                 animation: notificationFade 2s ease forwards; font-weight: bold;
+                text-align: center;
             `;
             notification.textContent = message;
             document.body.appendChild(notification);
@@ -1244,7 +1722,7 @@
                     }
                     
                     saveFavorites();
-                    showNotification('📺 Channels reordered');
+                    showNotification('📺 تم إعادة ترتيب القنوات');
                 }
             }
             
@@ -1400,6 +1878,7 @@
             channelElement.dataset.name = channel.name;
             channelElement.dataset.logo = channel.logo;
             channelElement.dataset.urls = JSON.stringify(channel.urls);
+            channelElement.setAttribute('tabindex', '0');
             
             const isActive = currentChannel && currentChannel.id === channel.id;
             const isFavorite = favoriteChannels.some(ch => ch.id === channel.id);
@@ -1431,6 +1910,7 @@
             favBtn.className = `channel-favorite ${isFavorite ? 'active' : ''}`;
             favBtn.dataset.id = channel.id;
             favBtn.innerHTML = isFavorite ? '<i class="fas fa-star"></i>' : '<i class="far fa-star"></i>';
+            favBtn.setAttribute('tabindex', '0');
             
             favBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -1444,6 +1924,7 @@
                 const dragHandle = document.createElement('div');
                 dragHandle.className = 'drag-handle';
                 dragHandle.innerHTML = '<i class="fas fa-grip-vertical"></i>';
+                dragHandle.setAttribute('tabindex', '0');
                 
                 dragHandle.addEventListener('mousedown', (e) => { e.preventDefault(); e.stopPropagation(); handleDragStart(e, channelElement); });
                 dragHandle.addEventListener('touchstart', (e) => { e.preventDefault(); e.stopPropagation(); handleDragStart(e, channelElement); }, { passive: false });
@@ -1514,10 +1995,10 @@
                 epgInfo.style.display = 'none';
                 serverLockSystem.reset();
                 reconnectSystem.stop();
+                remoteControl.setMode('packages');
             }
         };
 
-        // تعديل سلوك زر العودة ليعود للباقات وليس لصفحة الدخول
         window.addEventListener('popstate', function(event) {
             if (playerSection.classList.contains('active')) {
                 event.preventDefault();
@@ -1583,6 +2064,7 @@
             PACKAGES.forEach(pkg => {
                 const div = document.createElement("div");
                 div.className = "package";
+                div.setAttribute('tabindex', '0');
                 const packageIcon = pkg.icon || DEFAULT_ICONS.package;
                 
                 if (pkg.id === 'favorites') {
@@ -1600,6 +2082,9 @@
                 div.onclick = () => openPackage(pkg.id);
                 packagesContainer.appendChild(div);
             });
+            
+            // تحديث قائمة العناصر القابلة للتركيز
+            remoteControl.updateFocusableList();
         }
 
         async function loadAllChannels() {
@@ -1701,11 +2186,14 @@
             
             if (pkg.channels.length === 0) await loadChannelsForPackage(pkg);
             displayChannels(pkg.channels, false);
+            
+            remoteControl.setMode('channels');
         };
 
         function displayChannels(channels, isFavoriteView = false) {
             channelsList.innerHTML = '';
             channels.forEach(channel => channelsList.appendChild(createChannelElement(channel, isFavoriteView)));
+            remoteControl.updateFocusableList();
         }
         
         function showFavorites() {
@@ -1718,6 +2206,7 @@
             playerSection.classList.add('active');
             comprehensiveIndicator.classList.add('visible');
             displayChannels(favoriteChannels, true);
+            remoteControl.setMode('channels');
         }
 
         // ==================== تشغيل القناة ====================
@@ -2065,14 +2554,6 @@
         document.addEventListener('mozfullscreenchange', handleFullscreenChange);
         document.addEventListener('MSFullscreenChange', handleFullscreenChange);
 
-        document.addEventListener('keydown', (e) => {
-            if (!playerSection.classList.contains('active') || !currentPackageData) return;
-            if (e.key === 'ArrowRight') { e.preventDefault(); nextChannel(); }
-            else if (e.key === 'ArrowLeft') { e.preventDefault(); prevChannel(); }
-            else if (e.key === 'Escape' && isFullscreen) toggleFullscreen();
-            else if (e.key === 'f' || e.key === 'F') toggleFullscreen();
-        });
-
         fullscreenBtn.addEventListener('click', toggleFullscreen);
         exitFullscreenBtn.addEventListener('click', exitFullscreen);
         setupDoubleTap();
@@ -2106,6 +2587,9 @@
                 if (bufferCheckInterval) clearInterval(bufferCheckInterval);
                 if (epgInterval) clearInterval(epgInterval);
             });
+            
+            // بدء نظام التحكم عن بعد
+            remoteControl.setMode('packages');
         });
 
         function addDNSPrefetch() {
